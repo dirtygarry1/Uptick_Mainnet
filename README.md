@@ -109,24 +109,38 @@ sed -i -e "s/^indexer *=.*/indexer = \"$indexer\"/" $HOME/.uptickd/config/config
 sed -i.bak -e "s/^snapshot-interval *=.*/snapshot-interval = \"$snapshot_interval\"/" ~/.uptickd/config/app.toml`
 
 # Создаем сервисный файл
-`tee /etc/systemd/system/uptickd.service > /dev/null <<EOF
-[Unit]
-Description=uptickd
-After=network-online.target
+`tee /etc/systemd/system/uptickd.service > /dev/null <<EOF`
 
-[Service]
-User=$USER
-ExecStart=$(which uptickd) start
-Restart=on-failure
-RestartSec=3
-LimitNOFILE=65535
+`[Unit]`
 
-[Install]
-WantedBy=multi-user.target
-EOF`
+`Description=uptickd`
+
+`After=network-online.target`
+
+
+`[Service]`
+
+`User=$USER`
+
+`ExecStart=$(which uptickd) start`
+
+`Restart=on-failure`
+
+`RestartSec=3`
+
+`LimitNOFILE=65535`
+
+
+`[Install]`
+
+`WantedBy=multi-user.target`
+
+`EOF`
 
 `systemctl daemon-reload`
+
 `systemctl enable uptickd`
+
 `systemctl restart uptickd && journalctl -u uptickd -f -o cat`
 
 # Создаем валидатора
